@@ -1,0 +1,152 @@
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("/assets/fonts/Figtree.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm botanical palette — Gulmohar light pink background */
+    --background: 0.97 0.015 10;
+    --foreground: 0.22 0.03 55;
+
+    --card: 0.99 0.006 15;
+    --card-foreground: 0.22 0.03 55;
+
+    --popover: 0.99 0.006 15;
+    --popover-foreground: 0.22 0.03 55;
+
+    /* Deep forest green */
+    --primary: 0.38 0.1 155;
+    --primary-foreground: 0.98 0.004 90;
+
+    /* Warm cream */
+    --secondary: 0.94 0.02 90;
+    --secondary-foreground: 0.3 0.05 60;
+
+    --muted: 0.93 0.015 15;
+    --muted-foreground: 0.5 0.03 70;
+
+    /* Marigold orange accent */
+    --accent: 0.72 0.17 55;
+    --accent-foreground: 0.15 0.04 40;
+
+    --destructive: 0.55 0.2 25;
+    --destructive-foreground: 0.98 0.005 80;
+
+    --border: 0.88 0.02 15;
+    --input: 0.88 0.02 15;
+    --ring: 0.38 0.1 155;
+
+    --radius: 0.75rem;
+
+    /* Garden palette */
+    --garden-green: 0.42 0.12 155;
+    --garden-orange: 0.72 0.17 55;
+    --garden-yellow: 0.88 0.14 90;
+    --garden-earth: 0.35 0.06 60;
+    --garden-leaf: 0.55 0.14 145;
+    --whatsapp-green: 0.6 0.17 155;
+
+    --chart-1: 0.72 0.17 55;
+    --chart-2: 0.42 0.12 155;
+    --chart-3: 0.62 0.14 140;
+    --chart-4: 0.85 0.16 90;
+    --chart-5: 0.55 0.18 25;
+
+    --sidebar: 0.97 0.015 10;
+    --sidebar-foreground: 0.22 0.03 55;
+    --sidebar-primary: 0.38 0.1 155;
+    --sidebar-primary-foreground: 0.98 0.004 90;
+    --sidebar-accent: 0.94 0.02 90;
+    --sidebar-accent-foreground: 0.3 0.05 60;
+    --sidebar-border: 0.88 0.02 15;
+    --sidebar-ring: 0.38 0.1 155;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .text-garden-green {
+    color: oklch(var(--garden-green));
+  }
+  .bg-garden-green {
+    background-color: oklch(var(--garden-green));
+  }
+  .text-garden-orange {
+    color: oklch(var(--garden-orange));
+  }
+  .bg-garden-orange {
+    background-color: oklch(var(--garden-orange));
+  }
+  .text-garden-yellow {
+    color: oklch(var(--garden-yellow));
+  }
+  .bg-garden-yellow {
+    background-color: oklch(var(--garden-yellow));
+  }
+  .text-garden-earth {
+    color: oklch(var(--garden-earth));
+  }
+  .bg-garden-earth {
+    background-color: oklch(var(--garden-earth));
+  }
+  .text-garden-leaf {
+    color: oklch(var(--garden-leaf));
+  }
+  .bg-garden-leaf {
+    background-color: oklch(var(--garden-leaf));
+  }
+  .bg-whatsapp {
+    background-color: #25d366;
+  }
+  .text-whatsapp {
+    color: #25d366;
+  }
+
+  /* Placement context frames */
+  .frame-garden {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border: 3px solid #66bb6a;
+  }
+  .frame-balcony {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border: 3px solid #ffa726;
+  }
+  .frame-pot {
+    background: linear-gradient(135deg, #fbe9e7 0%, #ffccbc 100%);
+    border: 3px solid #bf7856;
+  }
+  .frame-hanging {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+    border: 3px solid #ab47bc;
+  }
+}
