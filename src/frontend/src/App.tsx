@@ -490,7 +490,7 @@ function PlantDetailDialog({
                         className="text-xs font-bold"
                         style={{ color: pot.price === 0 ? "#888" : "#e07b00" }}
                       >
-                        {pot.price === 0 ? "Free" : `+₹${pot.price}`}
+                        {pot.price === 0 ? "₹0" : `+₹${pot.price}`}
                       </span>
                     </button>
                   );
@@ -550,12 +550,14 @@ function CartDialog({
   cart,
   onUpdateQty,
   onRemove,
+  onPlantClick,
 }: {
   open: boolean;
   onClose: () => void;
   cart: CartItem[];
   onUpdateQty: (idx: number, qty: number) => void;
   onRemove: (idx: number) => void;
+  onPlantClick: (plantName: string) => void;
 }) {
   const totalAmount = cart.reduce(
     (sum, item) => sum + (item.plantPrice + item.potPrice) * item.quantity,
@@ -574,7 +576,8 @@ function CartDialog({
       }
       msg += `   Subtotal: ₹${itemTotal}\n\n`;
     });
-    msg += `💰 Grand Total: ₹${totalAmount}\n\nPlease confirm my order. Thank you! 🙏`;
+    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+    msg += `📦 Total Items: ${totalQty}\n💰 Grand Total: ₹${totalAmount}\n\nPlease confirm my order. Thank you! 🙏`;
     return msg;
   }
 
@@ -608,10 +611,16 @@ function CartDialog({
               style={{ scrollbarWidth: "thin" }}
             >
               {cart.map((item, idx) => (
-                <div
+                <button
+                  type="button"
                   key={`${item.plantName}-${item.potType}-${idx}`}
                   data-ocid={`cart.item.${idx + 1}`}
-                  className="flex items-center gap-3 bg-secondary/40 rounded-xl p-3"
+                  className="flex items-center gap-3 bg-secondary/40 rounded-xl p-3 cursor-pointer hover:bg-secondary/70 transition-colors w-full text-left"
+                  onClick={() => {
+                    onPlantClick(item.plantName);
+                    onClose();
+                  }}
+                  title={`View ${item.plantName}`}
                 >
                   <img
                     src={
@@ -666,7 +675,7 @@ function CartDialog({
                       <X className="w-3 h-3" />
                     </button>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 
@@ -828,7 +837,7 @@ function AppInner() {
   const whatsappUrl = `https://wa.me/918955381614?text=${encodeURIComponent("Hello! I would like to know more about your plants.")}`;
 
   const googleMapsUrl =
-    "https://maps.google.com/?q=Chansda+Bus+Stand+Udaipur+Rajasthan+313015";
+    "https://maps.google.com/?q=Chansda+Udaipur+Rajasthan+India+313015";
 
   return (
     <div
@@ -1024,22 +1033,6 @@ function AppInner() {
               </motion.div>
             </div>
           </div>
-
-          <div className="absolute bottom-0 left-0 right-0" aria-hidden="true">
-            <svg
-              viewBox="0 0 1440 60"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full"
-              aria-label="decorative wave"
-            >
-              <title>decorative wave</title>
-              <path
-                d="M0 60V30C360 0 720 60 1080 30C1260 15 1350 7.5 1440 0V60H0Z"
-                fill="oklch(0.97 0.015 10)"
-              />
-            </svg>
-          </div>
         </section>
 
         {/* Plants Section */}
@@ -1168,11 +1161,11 @@ function AppInner() {
                       data-ocid="contact.address.link"
                       className="text-muted-foreground mt-1 leading-relaxed hover:text-garden-green transition-colors underline underline-offset-2 block"
                     >
-                      Chansda Bus Stand,
+                      Chansda, Udaipur,
                       <br />
-                      Udaipur — 313015,
+                      Rajasthan, India,
                       <br />
-                      Rajasthan, India
+                      PIN 313015
                     </a>
                   </div>
                 </div>
@@ -1221,7 +1214,10 @@ function AppInner() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 px-4" style={{ backgroundColor: "#2d5a27" }}>
+      <footer
+        className="py-8 px-4"
+        style={{ backgroundColor: "oklch(0.97 0.015 10)" }}
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             {/* Left: Logo + Name */}
@@ -1238,7 +1234,7 @@ function AppInner() {
                 >
                   Gulmohar Vatika
                 </p>
-                <p className="text-sm" style={{ color: "#a8d9a0" }}>
+                <p className="text-sm" style={{ color: "#000000" }}>
                   प्रकृति की खूबसूरती, आपके द्वार
                 </p>
               </div>
@@ -1250,39 +1246,13 @@ function AppInner() {
                 🌸
               </span>
             </div>
-
-            {/* Right: Details */}
-            <div className="flex flex-col gap-1 text-sm md:text-right">
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ocid="footer.address.link"
-                className="hover:underline transition-colors"
-                style={{ color: "#a8d9a0" }}
-              >
-                Chansda Bus Stand, Udaipur — 313015
-              </a>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline transition-colors"
-                style={{ color: "#a8d9a0" }}
-              >
-                +91 89553 81614
-              </a>
-            </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-white/10 text-center">
-            <p className="text-xs" style={{ color: "#7ec86b" }}>
+          <div className="mt-6 pt-4 border-t border-black/10 text-center">
+            <p className="text-xs" style={{ color: "#000000" }}>
               © {new Date().getFullYear()} Gulmohar Vatika | Udaipur, Rajasthan
             </p>
-            <p
-              className="text-xs mt-1"
-              style={{ color: "rgba(126,200,107,0.6)" }}
-            >
+            <p className="text-xs mt-1" style={{ color: "rgba(0,0,0,0.6)" }}>
               Built with ❤️ using{" "}
               <a
                 href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
@@ -1312,6 +1282,13 @@ function AppInner() {
         cart={cart}
         onUpdateQty={updateCartQty}
         onRemove={removeFromCart}
+        onPlantClick={(name) => {
+          const found = displayPlants.find(
+            (p: { name: string; category: PlantCategory }) => p.name === name,
+          );
+          if (found) setSelectedPlant(found);
+          setCartOpen(false);
+        }}
       />
 
       {/* Floating WhatsApp button — bottom right */}
