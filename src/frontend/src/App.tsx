@@ -8,14 +8,20 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  ArrowLeft,
+  ArrowUpDown,
   Droplets,
   Flower2,
+  Home,
   Leaf,
   MapPin,
   Menu,
   Minus,
   Plus,
+  Search,
+  Share2,
   ShoppingCart,
+  SlidersHorizontal,
   Sun,
   Wind,
   X,
@@ -42,6 +48,38 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+// Indoor plant names set
+const INDOOR_PLANT_NAMES = new Set([
+  "Money Plant",
+  "Snake Plant",
+  "Areca Palm",
+  "Spider Plant",
+  "Peace Lily",
+  "ZZ Plant",
+  "Syngonium",
+  "Jade Plant",
+  "Aglaonema",
+  "Philodendron",
+]);
+
+function isIndoorPlant(name: string): boolean {
+  return INDOOR_PLANT_NAMES.has(name);
+}
+
+// Custom pricing for indoor plants (54% discount)
+const CUSTOM_PLANT_PRICING: Record<string, { price: number; mrp: number }> = {
+  "Money Plant": { price: 138, mrp: 300 },
+  "Snake Plant": { price: 276, mrp: 600 },
+  "Areca Palm": { price: 414, mrp: 900 },
+  "Spider Plant": { price: 115, mrp: 250 },
+  "Peace Lily": { price: 161, mrp: 350 },
+  "ZZ Plant": { price: 230, mrp: 500 },
+  Syngonium: { price: 161, mrp: 350 },
+  "Jade Plant": { price: 184, mrp: 400 },
+  Aglaonema: { price: 460, mrp: 1000 },
+  Philodendron: { price: 368, mrp: 800 },
+};
+
 const FALLBACK_PLANTS = [
   { name: "Coleus Wizard Mix", category: PlantCategory.foliage },
   { name: "Rudbeckia", category: PlantCategory.flowering },
@@ -58,6 +96,17 @@ const FALLBACK_PLANTS = [
   { name: "Salvia Vista Mix", category: PlantCategory.flowering },
   { name: "Petunia Daddy Mix", category: PlantCategory.flowering },
   { name: "Verbena Quartz Mix", category: PlantCategory.flowering },
+  // Indoor plants
+  { name: "Money Plant", category: PlantCategory.foliage },
+  { name: "Snake Plant", category: PlantCategory.foliage },
+  { name: "Areca Palm", category: PlantCategory.foliage },
+  { name: "Spider Plant", category: PlantCategory.foliage },
+  { name: "Peace Lily", category: PlantCategory.foliage },
+  { name: "ZZ Plant", category: PlantCategory.foliage },
+  { name: "Syngonium", category: PlantCategory.foliage },
+  { name: "Jade Plant", category: PlantCategory.foliage },
+  { name: "Aglaonema", category: PlantCategory.foliage },
+  { name: "Philodendron", category: PlantCategory.foliage },
 ];
 
 const PLANT_IMAGES: Record<string, string> = {
@@ -77,6 +126,17 @@ const PLANT_IMAGES: Record<string, string> = {
   "Salvia Vista Mix": "/assets/generated/plant-salvia.dim_400x400.jpg",
   "Petunia Daddy Mix": "/assets/generated/plant-petunia.dim_400x400.jpg",
   "Verbena Quartz Mix": "/assets/generated/plant-verbena.dim_400x400.jpg",
+  // Indoor plants
+  "Money Plant": "/assets/generated/plant-money-plant.dim_400x400.jpg",
+  "Snake Plant": "/assets/generated/plant-snake-plant.dim_400x400.jpg",
+  "Areca Palm": "/assets/generated/plant-areca-palm.dim_400x400.jpg",
+  "Spider Plant": "/assets/generated/plant-spider-plant.dim_400x400.jpg",
+  "Peace Lily": "/assets/generated/plant-peace-lily.dim_400x400.jpg",
+  "ZZ Plant": "/assets/generated/plant-zz-plant.dim_400x400.jpg",
+  Syngonium: "/assets/generated/plant-syngonium.dim_400x400.jpg",
+  "Jade Plant": "/assets/generated/plant-jade-plant.dim_400x400.jpg",
+  Aglaonema: "/assets/generated/plant-aglaonema.dim_400x400.jpg",
+  Philodendron: "/assets/generated/plant-philodendron.dim_400x400.jpg",
 };
 
 type PlantInfo = {
@@ -208,6 +268,91 @@ const PLANT_INFO: Record<string, PlantInfo> = {
     placement: "Ground cover, pots, hanging baskets",
     envEffect: "Attracts butterflies, natural ground cooler",
   },
+  // Indoor plants
+  "Money Plant": {
+    description:
+      "Money Plant (Pothos) is one of the most popular and easy-care indoor plants. Its trailing heart-shaped golden-green leaves brighten any corner and are believed to bring good luck and prosperity.",
+    water: "Low – water every 7–10 days, allow soil to dry between watering",
+    sunlight: "Low to bright indirect light – avoid direct sun",
+    placement: "Living room, office desk, bedroom shelves, bathroom",
+    envEffect: "Excellent air purifier – removes formaldehyde, benzene & CO₂",
+  },
+  "Snake Plant": {
+    description:
+      "Snake Plant (Sansevieria) is virtually indestructible and thrives on neglect. Its upright architectural leaves with yellow margins make it a striking statement piece in any room.",
+    water: "Very low – water every 2–4 weeks, overwatering is the main risk",
+    sunlight: "Tolerates low light; grows best in indirect bright light",
+    placement: "Bedroom, living room, office corner – anywhere indoors",
+    envEffect:
+      "Produces oxygen at night – ideal bedroom plant; filters toxins 24/7",
+  },
+  "Areca Palm": {
+    description:
+      "Areca Palm is an elegant tropical plant with graceful feathery fronds that instantly add a resort-like feel to your home. It's one of the best natural humidifiers available.",
+    water: "Moderate – keep soil moist in summer, reduce in winter",
+    sunlight: "Bright indirect light; avoid harsh direct afternoon sun",
+    placement: "Living room corner, hallway, covered balcony",
+    envEffect:
+      "Top air purifier; removes xylene & toluene; adds significant humidity",
+  },
+  "Spider Plant": {
+    description:
+      "Spider Plant is a cheerful, fast-growing plant with arching green-and-white striped leaves that produce cascading baby plantlets called 'spiderettes'. Perfect for beginners.",
+    water: "Moderate – water when top inch of soil is dry",
+    sunlight: "Bright to medium indirect light",
+    placement: "Hanging basket, shelf, window sill",
+    envEffect:
+      "Removes formaldehyde and carbon monoxide; safe for pets and children",
+  },
+  "Peace Lily": {
+    description:
+      "Peace Lily is a graceful plant that thrives in shade and produces stunning white flowers. It's one of the few flowering indoor plants that blooms in low light conditions.",
+    water: "Moderate – water when leaves begin to droop slightly",
+    sunlight: "Low to medium indirect light – thrives in shade",
+    placement: "Bedroom, bathroom, office, dark corners",
+    envEffect:
+      "NASA-recommended air purifier; removes ammonia, benzene & mold spores",
+  },
+  "ZZ Plant": {
+    description:
+      "ZZ Plant has striking glossy dark green oval leaves that look like they're made of wax. Incredibly drought-tolerant and thrives in neglect, making it perfect for busy lifestyles.",
+    water: "Very low – water every 2–3 weeks; stores water in rhizomes",
+    sunlight: "Low to bright indirect light; very tolerant of low light",
+    placement: "Office, bedroom, dim living rooms, north-facing rooms",
+    envEffect: "Cleans indoor air of xylene, toluene and benzene",
+  },
+  Syngonium: {
+    description:
+      "Syngonium (Arrowhead Plant) is a versatile plant with arrow-shaped leaves that change shape as the plant matures. Available in green, pink and variegated varieties.",
+    water: "Moderate – water when top 2 inches of soil are dry",
+    sunlight: "Medium to bright indirect light; no direct sun",
+    placement: "Table top, hanging basket, bathroom, office",
+    envEffect: "Humidifies air, removes benzene and formaldehyde",
+  },
+  "Jade Plant": {
+    description:
+      "Jade Plant is a succulent with thick, glossy oval leaves on woody stems that develops into a miniature tree over time. A symbol of good luck and prosperity in many cultures.",
+    water: "Low – water every 2–3 weeks; let soil dry completely",
+    sunlight: "Bright indirect to some direct morning sunlight",
+    placement: "Window sill, office desk, entrance area",
+    envEffect: "Increases humidity, improves indoor air quality",
+  },
+  Aglaonema: {
+    description:
+      "Aglaonema (Chinese Evergreen) is prized for its stunning variegated leaves in shades of green, silver, red and pink. One of the most forgiving and decorative indoor plants available.",
+    water: "Moderate – water when top inch of soil is dry",
+    sunlight: "Low to medium indirect light; tolerates shade well",
+    placement: "Living room, bedroom, office, any indoor space",
+    envEffect: "Excellent air purifier; removes toxins; increases productivity",
+  },
+  Philodendron: {
+    description:
+      "Philodendron is a tropical classic with large, heart-shaped glossy leaves. Easy to care for and fast-growing, it brings a lush jungle feel to any indoor space.",
+    water: "Moderate – water when top 2 inches of soil are dry",
+    sunlight: "Medium to bright indirect light",
+    placement: "Living room, bedroom, office, near windows",
+    envEffect: "Removes formaldehyde and CO₂; boosts humidity and oxygen",
+  },
 };
 
 const DEFAULT_PLANT_INFO: PlantInfo = {
@@ -250,10 +395,21 @@ const FOLIAGE_PRICE = 199;
 const DISCOUNT_FLOWERING = Math.round(((MRP - FLOWERING_PRICE) / MRP) * 100);
 const DISCOUNT_FOLIAGE = Math.round(((MRP - FOLIAGE_PRICE) / MRP) * 100);
 
-function getPlantPrice(category: PlantCategory): number {
+function getPlantPrice(name: string, category: PlantCategory): number {
+  if (CUSTOM_PLANT_PRICING[name]) return CUSTOM_PLANT_PRICING[name].price;
   return category === PlantCategory.foliage ? FOLIAGE_PRICE : FLOWERING_PRICE;
 }
-function getDiscount(category: PlantCategory): number {
+
+function getPlantMrp(name: string): number {
+  if (CUSTOM_PLANT_PRICING[name]) return CUSTOM_PLANT_PRICING[name].mrp;
+  return MRP;
+}
+
+function getDiscount(name: string, category: PlantCategory): number {
+  if (CUSTOM_PLANT_PRICING[name]) {
+    const { price, mrp } = CUSTOM_PLANT_PRICING[name];
+    return Math.round(((mrp - price) / mrp) * 100);
+  }
   return category === PlantCategory.foliage
     ? DISCOUNT_FOLIAGE
     : DISCOUNT_FLOWERING;
@@ -290,7 +446,7 @@ export type CartItem = {
   quantity: number;
 };
 
-function PlantDetailDialog({
+function PlantDetailPanel({
   plant,
   open,
   onClose,
@@ -303,27 +459,34 @@ function PlantDetailDialog({
 }) {
   const [selectedPot, setSelectedPot] = useState<PotType | null>(null);
   const [qty, setQty] = useState(1);
+  const [addHover, setAddHover] = useState(false);
 
-  // Reset selections whenever a new plant is opened
+  // Prevent body scroll when panel is open
   useEffect(() => {
     if (open) {
+      document.body.style.overflow = "hidden";
       setSelectedPot(null);
       setQty(1);
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
-
-  const cat = plant
-    ? (CATEGORY_COLORS[plant.category] ??
-      CATEGORY_COLORS[PlantCategory.flowering])
-    : null;
 
   const plantImg = plant
     ? (PLANT_IMAGES[plant.name] ??
       "/assets/generated/plant-marigold.dim_400x400.jpg")
     : "";
 
-  const plantPrice = plant ? getPlantPrice(plant.category) : FLOWERING_PRICE;
-  const discount = plant ? getDiscount(plant.category) : DISCOUNT_FLOWERING;
+  const plantPrice = plant
+    ? getPlantPrice(plant.name, plant.category)
+    : FLOWERING_PRICE;
+  const plantMrp = plant ? getPlantMrp(plant.name) : MRP;
+  const discount = plant
+    ? getDiscount(plant.name, plant.category)
+    : DISCOUNT_FLOWERING;
   const potPrice =
     selectedPot !== null
       ? (POT_OPTIONS.find((p) => p.type === selectedPot)?.price ?? 0)
@@ -333,6 +496,21 @@ function PlantDetailDialog({
   const info = plant
     ? (PLANT_INFO[plant.name] ?? DEFAULT_PLANT_INFO)
     : DEFAULT_PLANT_INFO;
+
+  const indoor = plant ? isIndoorPlant(plant.name) : false;
+
+  function handleShare() {
+    const title = plant?.name ?? "";
+    const text = `${info.description} Price: ₹${plantPrice}`;
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title, text, url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Link copied to clipboard!");
+      });
+    }
+  }
 
   function handleAddToCart() {
     if (!plant) return;
@@ -348,48 +526,82 @@ function PlantDetailDialog({
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(v) => {
-        if (!v) {
-          onClose();
-        }
-      }}
-    >
-      <DialogContent
-        data-ocid="plant.detail.dialog"
-        className="max-w-lg p-0 overflow-hidden rounded-2xl"
-      >
-        {plant && cat && (
-          <>
-            <DialogHeader className="px-5 pt-5 pb-3">
-              <div className="flex items-center gap-3">
+    <AnimatePresence>
+      {open && plant && (
+        <motion.div
+          key="plant-detail-panel"
+          data-ocid="plant.detail.dialog"
+          initial={{ x: "100%", opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: "100%", opacity: 0 }}
+          transition={{ type: "spring", damping: 28, stiffness: 260 }}
+          className="fixed inset-0 z-50 flex flex-col"
+          style={{ backgroundColor: "oklch(0.97 0.015 10)" }}
+        >
+          {/* Top bar */}
+          <div className="flex items-center justify-between px-4 py-3 bg-card/95 backdrop-blur-sm border-b border-border shadow-xs flex-shrink-0">
+            <button
+              type="button"
+              data-ocid="plant.detail.close_button"
+              onClick={onClose}
+              className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-garden-green transition-colors p-1.5 rounded-lg hover:bg-secondary"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="hidden sm:inline">Back</span>
+            </button>
+            <h2 className="font-display font-bold text-base text-foreground truncate max-w-[200px] sm:max-w-sm text-center">
+              {plant.name}
+            </h2>
+            <button
+              type="button"
+              data-ocid="plant.detail.share_button"
+              onClick={handleShare}
+              className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-garden-green transition-colors p-1.5 rounded-lg hover:bg-secondary"
+              aria-label="Share"
+            >
+              <Share2 className="w-5 h-5" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+          </div>
+
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto pb-28">
+            <div className="max-w-lg mx-auto px-4 py-4 flex flex-col gap-4">
+              {/* Plant image */}
+              <div className="relative w-full rounded-2xl overflow-hidden aspect-square shadow-botanical">
                 <img
                   src={plantImg}
                   alt={plant.name}
-                  className="w-16 h-16 rounded-xl object-cover border border-border"
+                  className="w-full h-full object-cover"
                 />
-                <div>
-                  <DialogTitle className="font-display text-lg font-bold text-foreground">
-                    {plant.name}
-                  </DialogTitle>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-garden-green font-bold text-base">
-                      ₹{plantPrice}
-                    </span>
-                    <span className="text-muted-foreground line-through text-sm">
-                      ₹{MRP}
-                    </span>
-                    <Badge className="bg-red-100 text-red-700 border-0 text-xs font-semibold px-2">
-                      {discount}% OFF
+                <div className="absolute top-3 right-3 flex flex-col gap-1.5">
+                  <Badge className="bg-red-500 text-white border-0 text-xs font-bold px-2 py-0.5 shadow">
+                    {discount}% OFF
+                  </Badge>
+                  {indoor && (
+                    <Badge className="bg-teal-100 text-teal-700 border-0 text-xs font-bold px-2 py-0.5 shadow">
+                      <Home className="w-3 h-3 mr-1" />
+                      Indoor
                     </Badge>
-                  </div>
+                  )}
                 </div>
               </div>
-            </DialogHeader>
 
-            {/* Plant Info Card */}
-            <div className="px-4 pb-2">
+              {/* Price info */}
+              <div className="flex items-center gap-3">
+                <span className="font-bold text-garden-green text-2xl">
+                  ₹{plantPrice}
+                </span>
+                <span className="text-muted-foreground line-through text-base">
+                  ₹{plantMrp}
+                </span>
+                <Badge className="bg-red-100 text-red-700 border-0 text-xs font-semibold px-2">
+                  {discount}% OFF
+                </Badge>
+              </div>
+
+              {/* Plant Info Card */}
               <div className="bg-green-50 border border-green-100 rounded-xl p-4 flex flex-col gap-3">
                 <p className="text-sm text-gray-700 leading-relaxed">
                   {info.description}
@@ -452,57 +664,57 @@ function PlantDetailDialog({
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Pot type selection */}
-            <div className="px-5 pt-2 pb-3">
-              <p className="text-sm font-semibold text-foreground mb-2">
-                Select Pot Type:
-              </p>
-              <div className="flex gap-2">
-                {POT_OPTIONS.map((pot) => {
-                  const isSelected = selectedPot === pot.type;
-                  return (
-                    <button
-                      key={pot.type}
-                      type="button"
-                      data-ocid={`plant.pot.${pot.type === "No Pot" ? "0" : pot.type === "4 Inch Pot" ? "1" : "2"}`}
-                      onClick={() => setSelectedPot(pot.type)}
-                      className={`flex-1 flex flex-col items-center gap-1 py-2 px-2 rounded-xl border-2 text-sm font-medium transition-all ${
-                        isSelected
-                          ? "border-green-400 bg-green-50 text-garden-green"
-                          : "border-border bg-card text-muted-foreground hover:border-green-200"
-                      }`}
-                    >
-                      {pot.image ? (
-                        <img
-                          src={pot.image}
-                          alt={pot.type}
-                          className="w-10 h-10 object-contain"
-                        />
-                      ) : (
-                        <span className="text-xl">{pot.icon}</span>
-                      )}
-                      <span className="text-xs font-semibold leading-tight text-center">
-                        {pot.type}
-                      </span>
-                      <span
-                        className="text-xs font-bold"
-                        style={{ color: pot.price === 0 ? "#888" : "#e07b00" }}
+              {/* Pot type selection */}
+              <div>
+                <p className="text-sm font-semibold text-foreground mb-2">
+                  Select Pot Type:
+                </p>
+                <div className="flex gap-2">
+                  {POT_OPTIONS.map((pot) => {
+                    const isSelected = selectedPot === pot.type;
+                    return (
+                      <button
+                        key={pot.type}
+                        type="button"
+                        data-ocid={`plant.pot.${pot.type === "No Pot" ? "0" : pot.type === "4 Inch Pot" ? "1" : "2"}`}
+                        onClick={() => setSelectedPot(pot.type)}
+                        className={`flex-1 flex flex-col items-center gap-1 py-2 px-2 rounded-xl border-2 text-sm font-medium transition-all ${
+                          isSelected
+                            ? "border-green-400 bg-green-50 text-garden-green"
+                            : "border-border bg-card text-muted-foreground hover:border-green-200"
+                        }`}
                       >
-                        {pot.price === 0 ? "₹0" : `+₹${pot.price}`}
-                      </span>
-                    </button>
-                  );
-                })}
+                        {pot.image ? (
+                          <img
+                            src={pot.image}
+                            alt={pot.type}
+                            className="w-10 h-10 object-contain"
+                          />
+                        ) : (
+                          <span className="text-xl">{pot.icon}</span>
+                        )}
+                        <span className="text-xs font-semibold leading-tight text-center">
+                          {pot.type}
+                        </span>
+                        <span
+                          className="text-xs font-bold"
+                          style={{
+                            color: pot.price === 0 ? "#888" : "#e07b00",
+                          }}
+                        >
+                          {pot.price === 0 ? "₹0" : `+₹${pot.price}`}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Quantity + Add to Cart */}
-            <div className="px-5 pb-5">
-              <div className="flex items-center justify-between bg-secondary/60 rounded-xl p-3 mb-3">
+              {/* Quantity selector */}
+              <div className="flex items-center justify-between bg-secondary/60 rounded-xl p-3">
                 <span className="text-sm font-medium text-foreground">
-                  Total: ₹{itemTotal}
+                  Quantity
                 </span>
                 <div className="flex items-center gap-2">
                   <button
@@ -526,21 +738,32 @@ function PlantDetailDialog({
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Floating Add to Cart button */}
+          <div className="fixed bottom-0 left-0 right-0 z-10 px-4 pb-5 pt-3 bg-gradient-to-t from-white/95 to-transparent">
+            <div className="max-w-lg mx-auto">
               <button
                 type="button"
                 data-ocid="plant.addtocart.button"
+                onMouseEnter={() => setAddHover(true)}
+                onMouseLeave={() => setAddHover(false)}
                 onClick={handleAddToCart}
-                className="flex items-center justify-center gap-2 w-full font-semibold py-3 rounded-xl transition-opacity text-sm shadow hover:opacity-90"
-                style={{ backgroundColor: "#fef9c3", color: "#111" }}
+                className="flex items-center justify-center gap-2 w-full font-semibold py-3.5 rounded-xl transition-colors text-sm shadow-lg"
+                style={{
+                  backgroundColor: addHover ? "#fde047" : "#fef9c3",
+                  color: "#111",
+                }}
               >
                 <ShoppingCart className="w-4 h-4" />
-                Add to Cart
+                Add to Cart – ₹{itemTotal}
               </button>
             </div>
-          </>
-        )}
-      </DialogContent>
-    </Dialog>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -563,6 +786,9 @@ function CartDialog({
     (sum, item) => sum + (item.plantPrice + item.potPrice) * item.quantity,
     0,
   );
+  const shippingCharges = totalAmount > 499 ? 0 : 59;
+  const grandTotal = totalAmount + shippingCharges;
+  const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   function generateWhatsAppMessage() {
     let msg = "Hello Gulmohar Vatika! 🌸\n\nI would like to order:\n\n";
@@ -576,8 +802,10 @@ function CartDialog({
       }
       msg += `   Subtotal: ₹${itemTotal}\n\n`;
     });
-    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
-    msg += `📦 Total Items: ${totalQty}\n💰 Grand Total: ₹${totalAmount}\n\nPlease confirm my order. Thank you! 🙏`;
+    msg += `📦 Total Quantity: ${totalQty}\n`;
+    msg += `🚚 Shipping: ₹${shippingCharges}\n`;
+    msg += `💰 Bill Amount: ₹${totalAmount}\n`;
+    msg += `💎 Grand Total: ₹${grandTotal}\n\nPlease confirm my order. Thank you! 🙏`;
     return msg;
   }
 
@@ -592,7 +820,7 @@ function CartDialog({
         <DialogHeader className="px-5 pt-5 pb-3 border-b border-border">
           <DialogTitle className="font-display text-lg font-bold text-foreground flex items-center gap-2">
             <ShoppingCart className="w-5 h-5 text-garden-green" />
-            Your Cart ({cart.length} items)
+            Your Cart ({totalQty} items)
           </DialogTitle>
         </DialogHeader>
 
@@ -607,50 +835,59 @@ function CartDialog({
         ) : (
           <>
             <div
-              className="overflow-y-auto max-h-64 px-5 py-3 flex flex-col gap-3"
+              className="overflow-y-auto max-h-60 px-5 py-3 flex flex-col gap-3"
               style={{ scrollbarWidth: "thin" }}
             >
               {cart.map((item, idx) => (
-                <button
-                  type="button"
+                <div
                   key={`${item.plantName}-${item.potType}-${idx}`}
                   data-ocid={`cart.item.${idx + 1}`}
-                  className="flex items-center gap-3 bg-secondary/40 rounded-xl p-3 cursor-pointer hover:bg-secondary/70 transition-colors w-full text-left"
-                  onClick={() => {
-                    onPlantClick(item.plantName);
-                    onClose();
-                  }}
-                  title={`View ${item.plantName}`}
+                  className="flex items-center gap-3 bg-secondary/40 rounded-xl p-3"
                 >
-                  <img
-                    src={
-                      PLANT_IMAGES[item.plantName] ??
-                      "/assets/generated/plant-marigold.dim_400x400.jpg"
-                    }
-                    alt={item.plantName}
-                    className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-foreground truncate">
-                      {item.plantName}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {item.potType}
-                      {item.potPrice > 0 ? ` (+₹${item.potPrice})` : ""}
-                    </p>
-                    <p className="text-xs font-bold text-garden-green">
-                      ₹{(item.plantPrice + item.potPrice) * item.quantity}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
+                  {/* Clickable image + name */}
+                  <button
+                    type="button"
+                    className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer hover:opacity-80 transition-opacity text-left"
+                    onClick={() => {
+                      onPlantClick(item.plantName);
+                      onClose();
+                    }}
+                    title={`View ${item.plantName}`}
+                  >
+                    <img
+                      src={
+                        PLANT_IMAGES[item.plantName] ??
+                        "/assets/generated/plant-marigold.dim_400x400.jpg"
+                      }
+                      alt={item.plantName}
+                      className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-foreground truncate">
+                        {item.plantName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {item.potType}
+                        {item.potPrice > 0 ? ` (+₹${item.potPrice})` : ""}
+                      </p>
+                      <p className="text-xs font-bold text-garden-green">
+                        ₹{(item.plantPrice + item.potPrice) * item.quantity}
+                      </p>
+                    </div>
+                  </button>
+                  {/* Qty controls - stopPropagation */}
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
                     <button
                       type="button"
                       data-ocid={`cart.decrease.button.${idx + 1}`}
-                      onClick={() =>
-                        item.quantity > 1
-                          ? onUpdateQty(idx, item.quantity - 1)
-                          : onRemove(idx)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (item.quantity > 1) {
+                          onUpdateQty(idx, item.quantity - 1);
+                        } else {
+                          onRemove(idx);
+                        }
+                      }}
                       className="w-7 h-7 rounded-full border border-border bg-card flex items-center justify-center text-sm hover:bg-secondary"
                     >
                       <Minus className="w-3 h-3" />
@@ -661,7 +898,10 @@ function CartDialog({
                     <button
                       type="button"
                       data-ocid={`cart.increase.button.${idx + 1}`}
-                      onClick={() => onUpdateQty(idx, item.quantity + 1)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onUpdateQty(idx, item.quantity + 1);
+                      }}
                       className="w-7 h-7 rounded-full border border-border bg-card flex items-center justify-center text-sm hover:bg-secondary"
                     >
                       <Plus className="w-3 h-3" />
@@ -669,24 +909,53 @@ function CartDialog({
                     <button
                       type="button"
                       data-ocid={`cart.remove.button.${idx + 1}`}
-                      onClick={() => onRemove(idx)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove(idx);
+                      }}
                       className="w-7 h-7 rounded-full bg-red-50 text-red-400 flex items-center justify-center ml-1 hover:bg-red-100"
                     >
                       <X className="w-3 h-3" />
                     </button>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
 
             <div className="px-5 pb-5 pt-3 border-t border-border">
-              <div className="flex justify-between items-center mb-3 bg-garden-green/10 rounded-xl px-4 py-2.5">
-                <span className="font-semibold text-foreground text-sm">
-                  Grand Total
-                </span>
-                <span className="font-bold text-garden-green text-lg">
-                  ₹{totalAmount}
-                </span>
+              {/* Grand total breakdown */}
+              <div className="bg-garden-green/10 rounded-xl px-4 py-3 flex flex-col gap-2 mb-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-foreground">Bill Amount</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    ₹{totalAmount}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-foreground">
+                    Shipping
+                    {shippingCharges === 0 && (
+                      <span className="ml-1.5 text-xs text-green-600 font-medium">
+                        Free!
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">
+                    {shippingCharges === 0 ? "₹0" : `₹${shippingCharges}`}
+                  </span>
+                </div>
+                <div className="h-px bg-border" />
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-foreground">Grand Total</span>
+                  <span className="font-bold text-garden-green text-lg">
+                    ₹{grandTotal}
+                  </span>
+                </div>
+                {shippingCharges > 0 && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Add items worth ₹{500 - totalAmount} more for free shipping!
+                  </p>
+                )}
               </div>
               <a
                 href={whatsappUrl}
@@ -707,6 +976,10 @@ function CartDialog({
   );
 }
 
+type FilterType = "all" | "flowering" | "foliage" | "indoor";
+type SortType = "default" | "name-az" | "price-low" | "price-high";
+type PriceRange = "all" | "under200" | "200to400" | "above400";
+
 function PlantCard({
   plant,
   index,
@@ -719,8 +992,9 @@ function PlantCard({
   const cat =
     CATEGORY_COLORS[plant.category] ?? CATEGORY_COLORS[PlantCategory.flowering];
   const img = PLANT_IMAGES[plant.name];
-  const price = getPlantPrice(plant.category);
-  const discount = getDiscount(plant.category);
+  const price = getPlantPrice(plant.name, plant.category);
+  const discount = getDiscount(plant.name, plant.category);
+  const indoor = isIndoorPlant(plant.name);
 
   return (
     <motion.div
@@ -750,6 +1024,14 @@ function PlantCard({
             {discount}% OFF
           </Badge>
         </div>
+        {indoor && (
+          <div className="absolute top-2 left-2">
+            <Badge className="bg-teal-500 text-white border-0 text-xs font-bold px-2 py-0.5 shadow">
+              <Home className="w-3 h-3 mr-1" />
+              Indoor
+            </Badge>
+          </div>
+        )}
       </div>
 
       <div className="p-3 flex flex-col gap-2">
@@ -759,19 +1041,26 @@ function PlantCard({
         <div className="flex items-center gap-1.5">
           <span className="font-bold text-garden-green text-sm">₹{price}</span>
           <span className="text-muted-foreground line-through text-xs">
-            ₹{MRP}
+            ₹{getPlantMrp(plant.name)}
           </span>
         </div>
-        <Badge
-          className={`${cat.bg} ${cat.text} border-0 text-xs font-medium px-2 py-0.5 self-start`}
-        >
-          {plant.category === PlantCategory.foliage ? (
-            <Leaf className="w-3 h-3 mr-1" />
-          ) : (
-            <Flower2 className="w-3 h-3 mr-1" />
-          )}
-          {cat.label}
-        </Badge>
+        {indoor ? (
+          <Badge className="bg-teal-100 text-teal-700 border-0 text-xs font-medium px-2 py-0.5 self-start">
+            <Home className="w-3 h-3 mr-1" />
+            Indoor
+          </Badge>
+        ) : (
+          <Badge
+            className={`${cat.bg} ${cat.text} border-0 text-xs font-medium px-2 py-0.5 self-start`}
+          >
+            {plant.category === PlantCategory.foliage ? (
+              <Leaf className="w-3 h-3 mr-1" />
+            ) : (
+              <Flower2 className="w-3 h-3 mr-1" />
+            )}
+            {cat.label}
+          </Badge>
+        )}
       </div>
     </motion.div>
   );
@@ -785,6 +1074,13 @@ function AppInner() {
   } | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<FilterType>("all");
+  const [priceRange, setPriceRange] = useState<PriceRange>("all");
+  const [sortType, setSortType] = useState<SortType>("default");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+
   const { data: plants, isLoading, isError } = useGetPlants();
   const initMutation = useInitializePlants();
   const initialized = useRef(false);
@@ -797,7 +1093,47 @@ function AppInner() {
     }
   }, [mutate]);
 
-  const displayPlants = plants && plants.length > 0 ? plants : FALLBACK_PLANTS;
+  const allPlants = plants && plants.length > 0 ? plants : FALLBACK_PLANTS;
+
+  // Filter + Search + Sort
+  let displayPlants = allPlants.filter((p) => {
+    const nameMatch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!nameMatch) return false;
+
+    if (filterType === "indoor") return isIndoorPlant(p.name);
+    if (filterType === "flowering")
+      return p.category === PlantCategory.flowering && !isIndoorPlant(p.name);
+    if (filterType === "foliage")
+      return p.category === PlantCategory.foliage && !isIndoorPlant(p.name);
+
+    return true;
+  });
+
+  // Price range filter
+  displayPlants = displayPlants.filter((p) => {
+    const price = getPlantPrice(p.name, p.category);
+    if (priceRange === "under200") return price < 200;
+    if (priceRange === "200to400") return price >= 200 && price <= 400;
+    if (priceRange === "above400") return price > 400;
+    return true;
+  });
+
+  // Sort
+  if (sortType === "name-az") {
+    displayPlants = [...displayPlants].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+  } else if (sortType === "price-low") {
+    displayPlants = [...displayPlants].sort(
+      (a, b) =>
+        getPlantPrice(a.name, a.category) - getPlantPrice(b.name, b.category),
+    );
+  } else if (sortType === "price-high") {
+    displayPlants = [...displayPlants].sort(
+      (a, b) =>
+        getPlantPrice(b.name, b.category) - getPlantPrice(a.name, a.category),
+    );
+  }
 
   const scrollTo = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -835,9 +1171,11 @@ function AppInner() {
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const whatsappUrl = `https://wa.me/918955381614?text=${encodeURIComponent("Hello! I would like to know more about your plants.")}`;
-
   const googleMapsUrl =
     "https://maps.google.com/?q=Chansda+Udaipur+Rajasthan+India+313015";
+
+  const hasActiveFilter = filterType !== "all" || priceRange !== "all";
+  const hasActiveSort = sortType !== "default";
 
   return (
     <div
@@ -845,7 +1183,7 @@ function AppInner() {
       style={{ backgroundColor: "oklch(0.97 0.015 10)" }}
     >
       {/* Navbar */}
-      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border shadow-xs">
+      <header className="sticky top-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-xs">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -897,7 +1235,6 @@ function AppInner() {
           </nav>
 
           <div className="flex items-center gap-2">
-            {/* Cart button */}
             <button
               type="button"
               data-ocid="cart.open_modal_button"
@@ -1046,7 +1383,7 @@ function AppInner() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
             <div className="inline-flex items-center gap-2 bg-garden-green/10 text-garden-green px-4 py-1.5 rounded-full text-sm font-medium mb-4">
               <Leaf className="w-4 h-4" />
@@ -1060,6 +1397,30 @@ function AppInner() {
               gardens, balconies &amp; pots.
             </p>
           </motion.div>
+
+          {/* Search bar */}
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                data-ocid="plants.search_input"
+                placeholder="Search plants..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-full border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-garden-green/40 focus:border-garden-green transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
 
           {isLoading && (
             <div
@@ -1101,18 +1462,40 @@ function AppInner() {
             </div>
           )}
 
-          {!isLoading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {displayPlants.map((plant, i) => (
-                <PlantCard
-                  key={plant.name}
-                  plant={plant}
-                  index={i}
-                  onClick={() => setSelectedPlant(plant)}
-                />
-              ))}
-            </div>
-          )}
+          {!isLoading &&
+            (displayPlants.length === 0 ? (
+              <div
+                data-ocid="plants.empty_state"
+                className="text-center py-16 text-muted-foreground"
+              >
+                <Search className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="text-base font-medium">No plants found</p>
+                <p className="text-sm mt-1">Try a different search or filter</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setFilterType("all");
+                    setPriceRange("all");
+                    setSortType("default");
+                  }}
+                  className="mt-4 text-sm text-garden-green underline hover:opacity-80"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {displayPlants.map((plant, i) => (
+                  <PlantCard
+                    key={plant.name}
+                    plant={plant}
+                    index={i}
+                    onClick={() => setSelectedPlant(plant)}
+                  />
+                ))}
+              </div>
+            ))}
         </section>
 
         {/* Contact Section */}
@@ -1172,7 +1555,6 @@ function AppInner() {
 
                 <div className="h-px bg-border" />
 
-                {/* WhatsApp only */}
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                     <WhatsAppIcon className="w-5 h-5 text-green-600" />
@@ -1220,7 +1602,6 @@ function AppInner() {
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-            {/* Left: Logo + Name */}
             <div className="flex items-center gap-3">
               <img
                 src="/assets/generated/gulmohar-logo-transparent.dim_300x300.png"
@@ -1230,7 +1611,7 @@ function AppInner() {
               <div>
                 <p
                   className="font-display font-bold text-lg"
-                  style={{ color: "#7ec86b" }}
+                  style={{ color: "#000000" }}
                 >
                   Gulmohar Vatika
                 </p>
@@ -1240,7 +1621,6 @@ function AppInner() {
               </div>
             </div>
 
-            {/* Center: Flower emoji */}
             <div className="flex justify-center">
               <span className="text-3xl" aria-hidden="true">
                 🌸
@@ -1267,8 +1647,8 @@ function AppInner() {
         </div>
       </footer>
 
-      {/* Plant Detail Dialog */}
-      <PlantDetailDialog
+      {/* Plant Detail Full-Screen Panel */}
+      <PlantDetailPanel
         plant={selectedPlant}
         open={selectedPlant !== null}
         onClose={() => setSelectedPlant(null)}
@@ -1283,7 +1663,7 @@ function AppInner() {
         onUpdateQty={updateCartQty}
         onRemove={removeFromCart}
         onPlantClick={(name) => {
-          const found = displayPlants.find(
+          const found = allPlants.find(
             (p: { name: string; category: PlantCategory }) => p.name === name,
           );
           if (found) setSelectedPlant(found);
@@ -1291,18 +1671,171 @@ function AppInner() {
         }}
       />
 
+      {/* Floating Filter + Sort buttons (bottom-left) */}
+      <div className="fixed bottom-6 left-4 z-40 flex flex-col gap-2">
+        {/* Filter panel */}
+        <AnimatePresence>
+          {filterOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="absolute bottom-full mb-2 left-0 bg-card rounded-2xl shadow-botanical-lg border border-border p-4 min-w-[220px]"
+            >
+              <p className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">
+                Plant Type
+              </p>
+              <div className="flex flex-col gap-1 mb-3">
+                {(
+                  [
+                    { value: "all", label: "All Plants" },
+                    { value: "flowering", label: "Flowering" },
+                    { value: "foliage", label: "Foliage" },
+                    { value: "indoor", label: "Indoor" },
+                  ] as { value: FilterType; label: string }[]
+                ).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    data-ocid={`filter.type.${opt.value}.toggle`}
+                    onClick={() => setFilterType(opt.value)}
+                    className={`text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      filterType === opt.value
+                        ? "bg-garden-green text-white font-semibold"
+                        : "hover:bg-secondary text-foreground"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">
+                Price Range
+              </p>
+              <div className="flex flex-col gap-1">
+                {(
+                  [
+                    { value: "all", label: "All Prices" },
+                    { value: "under200", label: "Under ₹200" },
+                    { value: "200to400", label: "₹200 – ₹400" },
+                    { value: "above400", label: "Above ₹400" },
+                  ] as { value: PriceRange; label: string }[]
+                ).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    data-ocid={`filter.price.${opt.value}.toggle`}
+                    onClick={() => setPriceRange(opt.value)}
+                    className={`text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      priceRange === opt.value
+                        ? "bg-garden-green text-white font-semibold"
+                        : "hover:bg-secondary text-foreground"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Sort panel */}
+        <AnimatePresence>
+          {sortOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="absolute bottom-full mb-16 left-0 bg-card rounded-2xl shadow-botanical-lg border border-border p-4 min-w-[200px]"
+            >
+              <p className="text-xs font-bold text-foreground mb-2 uppercase tracking-wide">
+                Sort By
+              </p>
+              <div className="flex flex-col gap-1">
+                {(
+                  [
+                    { value: "default", label: "Default" },
+                    { value: "name-az", label: "Name A–Z" },
+                    { value: "price-low", label: "Price: Low to High" },
+                    { value: "price-high", label: "Price: High to Low" },
+                  ] as { value: SortType; label: string }[]
+                ).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    data-ocid={`sort.${opt.value}.toggle`}
+                    onClick={() => setSortType(opt.value)}
+                    className={`text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      sortType === opt.value
+                        ? "bg-garden-green text-white font-semibold"
+                        : "hover:bg-secondary text-foreground"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            data-ocid="filter.toggle"
+            onClick={() => {
+              setFilterOpen((v) => !v);
+              setSortOpen(false);
+            }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold shadow-botanical transition-colors ${
+              hasActiveFilter
+                ? "bg-garden-green text-white"
+                : "bg-card border border-border text-foreground hover:bg-secondary"
+            }`}
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Filter
+            {hasActiveFilter && (
+              <span className="w-2 h-2 rounded-full bg-white" />
+            )}
+          </button>
+          <button
+            type="button"
+            data-ocid="sort.toggle"
+            onClick={() => {
+              setSortOpen((v) => !v);
+              setFilterOpen(false);
+            }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold shadow-botanical transition-colors ${
+              hasActiveSort
+                ? "bg-garden-green text-white"
+                : "bg-card border border-border text-foreground hover:bg-secondary"
+            }`}
+          >
+            <ArrowUpDown className="w-4 h-4" />
+            Sort
+            {hasActiveSort && (
+              <span className="w-2 h-2 rounded-full bg-white" />
+            )}
+          </button>
+        </div>
+      </div>
+
       {/* Floating WhatsApp button — bottom right */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         data-ocid="whatsapp.floating.button"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 text-white font-semibold px-4 py-3 rounded-full shadow-xl hover:opacity-90 transition-all hover:scale-105"
+        className="fixed bottom-6 right-4 z-40 flex items-center gap-2 text-white font-semibold px-5 py-3 rounded-full shadow-botanical-lg hover:opacity-90 transition-opacity"
         style={{ backgroundColor: "#25D366" }}
         aria-label="Contact on WhatsApp"
       >
         <WhatsAppIcon className="w-5 h-5" />
-        <span className="text-sm">WhatsApp</span>
+        <span className="hidden sm:inline text-sm">Order</span>
       </a>
     </div>
   );
